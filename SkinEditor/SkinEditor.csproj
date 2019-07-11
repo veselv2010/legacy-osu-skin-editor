@@ -69,6 +69,7 @@
       <DependentUpon>SkinExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="SkinWorker.cs" />
+    <Compile Include="ZipExporter.cs" />
     <Page Include="ElementSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

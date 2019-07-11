@@ -171,6 +171,7 @@ namespace SkinEditor
             foreach (Image elem in OnScreenImages)
             {
                 File.Copy(elem.Source.ToString().Remove(0, 8), "export\\" + SkinWorker.Name2FileNameConv(elem.Source.ToString(), false), true);
+                ZipExporter.AddFileToZip("exportzip.zip", elem.Source.ToString().Remove(0, 8)); //it just works
                 ProgressBarExport.Value++; //factory new
             }
             Process.Start("export\\");
