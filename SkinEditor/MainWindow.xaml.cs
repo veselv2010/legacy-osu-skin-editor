@@ -391,7 +391,7 @@ namespace SkinEditor
         private void ButtonCursor_Click(object sender, RoutedEventArgs e)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
-            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap, 5, 5);
+            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap, 40, 40); //судя по рунам цифры в перегрузках  - расположения "точки", которой пользователь кликает
 
             //System.Windows.Forms.Cursors.PanNorth.Handle
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
