@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -389,8 +390,14 @@ namespace SkinEditor
 
         private void ButtonCursor_Click(object sender, RoutedEventArgs e)
         {
-            CursorConverter converter = new CursorConverter(); //
-            var fdsa = converter.GetStandardValuesExclusive();
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
+            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap, 5, 5);
+
+            //System.Windows.Forms.Cursors.PanNorth.Handle
+            SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
+            GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
+           // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
+
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
