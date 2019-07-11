@@ -11,23 +11,6 @@ using System.Windows.Media;
 
 namespace SkinEditor
 {
-    /// <summary>
-    /// разобраться с листами
-    /// чето сделать с -овер элементами
-    /// сделать сохранение измененных элементов под видом пункта в комбобоксе (самая объемная ищью из всех: для этого нужно переделать логику загрузки объектов)
-    /// вынести абсолютный путь каталога запуска программы как статический объект в SkinWorker
-    /// сделать адекватный скейлинг (без этого невозможно сделать вкладку In-game)
-    /// уничтожить велосипеды в коде (пример такого - ивент KeyDown)
-    /// оформить нормальный рефакторинг (уничтожить затупы со слешами в путях, с расширениями...)
-    /// затестить регекс в методах SkinWorker и где-то в основном окне
-    /// вынести прогрессбар в отдельный поток
-    /// файл эксплорер
-    /// запаковывать весь экспорт в зип и менять расширение на .osk
-    /// перенести все это в ищью на гитхабе (!!!)
-    /// сделать маску на элементы menu-background (в осу сыгранные карты - оранжевый цвет, несыгранные - розовый)
-    /// выкупить как собирать одну кнопку из трех файлов (button-...)
-    /// генерация cur/ani из пнг файлов
-    /// </summary>
     public partial class MainWindow : Window
     {
         private int LastItem = 0; //уничтожить
@@ -277,7 +260,7 @@ namespace SkinEditor
             File.Copy(SkinIniPath, "export\\" + "skin.ini", true); //сделать балдежное окно с галочками при экспорте этого файла        }
         }
 
-            private void RadioButtonGameOver_Checked(object sender, RoutedEventArgs e)
+        private void RadioButtonGameOver_Checked(object sender, RoutedEventArgs e)
         {
             pause_overlay.Visibility = Visibility.Hidden;
             fail_background.Visibility = Visibility.Visible;
