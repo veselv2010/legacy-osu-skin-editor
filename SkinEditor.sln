@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinEditor", "SkinEditor\SkinEditor.csproj", "{14EA1A1A-85B1-4EB0-879C-814903282D49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14EA1A1A-85B1-4EB0-879C-814903282D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14EA1A1A-85B1-4EB0-879C-814903282D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14EA1A1A-85B1-4EB0-879C-814903282D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14EA1A1A-85B1-4EB0-879C-814903282D49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EA996F6-8192-4DCA-88A0-FFC47D058EAF}
+	EndGlobalSection
+EndGlobal
