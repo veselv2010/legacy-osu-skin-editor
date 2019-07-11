@@ -269,14 +269,15 @@ namespace SkinEditor
         private void ButtonSkinIni_Click(object sender, RoutedEventArgs e)
         {
             string SkinIniPath = SkinIniParser.SkinIniInit(ComboBoxExistingSkin.SelectedValue as string);
-            
+
             Name.Text = SkinIniParser.GetPropertyBySenderName(Name.Name);/////////////////////////////////////////////////////////////////////////
             Author.Text = SkinIniParser.GetPropertyBySenderName(Author.Name);/////////////////////////////////////////////////////////////////////////
             Version.Text = SkinIniParser.GetPropertyBySenderName(Version.Name);//запилить ивент
-            File.Copy(SkinIniPath, "export\\" + "skin.ini", true); //сделать балдежное окно с галочками при экспорте этого файла
+            Directory.CreateDirectory("export");
+            File.Copy(SkinIniPath, "export\\" + "skin.ini", true); //сделать балдежное окно с галочками при экспорте этого файла        }
         }
 
-        private void RadioButtonGameOver_Checked(object sender, RoutedEventArgs e)
+            private void RadioButtonGameOver_Checked(object sender, RoutedEventArgs e)
         {
             pause_overlay.Visibility = Visibility.Hidden;
             fail_background.Visibility = Visibility.Visible;
