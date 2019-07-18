@@ -1,0 +1,17 @@
+﻿<Window x:Class="SkinEditor.ColourPicker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SkinEditor"
+        mc:Ignorable="d"
+        Title="ColourPicker" Height="350" Width="400">
+    <Grid>
+        <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="160" Margin="222,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="160"/>
+        <TextBox x:Name="TextBoxColourR" HorizontalAlignment="Left" Height="23" Margin="97,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TextBoxColourG" HorizontalAlignment="Left" Height="23" Margin="97,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TextBoxColourB" HorizontalAlignment="Left" Height="23" Margin="97,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="TextBoxColourHEX" HorizontalAlignment="Left" Height="23" Margin="97,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</Window>

@@ -58,6 +58,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ColourPicker.xaml.cs">
+      <DependentUpon>ColourPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ElementSelector.xaml.cs">
       <DependentUpon>ElementSelector.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,10 @@
     </Compile>
     <Compile Include="SkinWorker.cs" />
     <Compile Include="ZipExporter.cs" />
+    <Page Include="ColourPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ElementSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +131,13 @@
     <Content Include="Default\applause.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\ToolTips.txt" />
+    <Resource Include="Resources\reisen_0.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\reisen_1.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

@@ -1,0 +1,302 @@
+Name:
+    Question: What is the name of this skin?
+    Value: text (skin name)
+    Default: (empty)
+    Notes:
+        At this time, this command is not used.
+        The osu!client will refer to the folder's name instead 
+	 when listing.
+
+Author:
+    Question: Who is the author of this skin?
+    Value: text (skin creator)
+    Default: (empty)
+    Notes:
+        At this time, this command is not used.
+        Use your username.
+            Using your forum username is preferred.
+
+Version:
+    Question: How should the skin behave?
+    Values:
+        1.0
+        2.0
+        2.1
+        2.2
+        2.3
+        2.4
+        2.5
+        latest
+    Notes:
+        If the skin.ini file is not present, latest 
+	 will be used instead.
+        If the skin.ini file is present, but does not 
+	 use the Version command, 1.0 will be assumed 
+	 (legacy support).
+
+AnimationFramerate:
+    Question: How many frames should be displayed by the animations
+	       that depend on this value in one second?
+    Value: positive integer
+    Notes:
+        This will set the framerate of most animations.
+        Exceptions: circleoverlays, sliderball, pippidon, 
+	 osu!mania notes and lighting
+
+AllowSliderBallTint:
+    Question: Should the slider combo colour tint 
+	       the slider ball?
+    Values: 0 or 1
+    Default: 0
+    Notes:
+        The default sliderball will always get tinted, 
+	 if enabled in options.
+
+ComboBurstRandom
+    Question: Should combobursts be shown in a random order?
+    Values: 0 or 1
+    Default: 0
+    Notes:
+        This is not for osu!taiko.
+
+CursorCentre:
+    Question: Should the cursor have an origin at the centre 
+	       of the image?
+    Values: 0 or 1
+    Default: 1
+    Notes:
+        0 = top-left corner
+        1 = centered
+
+CursorExpand:
+    Question: Should the cursor expand when clicked?
+    Values: 0 or 1
+    Default: 1
+
+CursorRotate:
+    Question: Should the cursor sprite rotate constantly?
+    Values: 0 or 1
+    Default: 1
+
+CursorTrailRotate:
+    Question: Should the cursor sprite rotate constantly?
+    Values: 0 or 1
+    Default: 1
+
+CustomComboBurstSounds:
+    Question: On which combo counts should the comboburst 
+	       sounds be played?
+    Value: comma-split list with positive integers
+    Default: (empty)
+    Notes:
+        This is not for osu!taiko.
+        This only affects the combo burst sounds, not 
+	 the milestones.
+
+HitCircleOverlayAboveNumber:
+    Question: Should the hitcircleoverlay be drawn above 
+  	       the numbers?
+    Values: 0 or 1
+    Default: 1
+    Notes:
+        This is for osu!standard only.
+        Old command: HitCircleOverlayAboveNumer (with typo) 
+		      still works for legacy support
+
+LayeredHitSounds:
+    Question: Should the hitnormal sounds always be played?
+    Values: 0 or 1
+    Default: 1
+    Notes:
+        This is not for osu!taiko.
+
+SliderBallFlip:
+    Question: If the sliderball is reversed, should 
+	       the sliderball sprite flip horizontally?
+    Values: 0 or 1
+    Default: 1
+    Notes:
+        This is for osu!standard only.
+
+ SliderBallFrames:
+    Question: How many frames do you have for 
+	       the sliderball animation?
+    Value: positive integer
+    Default: (empty)
+    Notes:
+        This is for osu!standard only.
+        This is slider velocity dependent
+        This command might be obsolete
+
+SliderStyle:
+    Question: What style should the sliders use?
+    Value: 1 / 2
+    Default: 2
+    Notes:
+        Stable (Fallback) stream only
+        1 = Segmented tracks
+        2 = Gradient tracks
+
+SpinnerFadePlayfield:
+    Question: Should the spinner add black bars during spins?
+    Values: 0 or 1
+    Default: 0
+
+SpinnerFrequencyModulate:
+    Question: Should the spinnerspin sound pitch up 
+	       the longer the spinner goes?
+    Values: 0 or 1
+    Default: 1
+
+SpinnerNoBlink:
+    Question: Should the highest bar of the metre stay 
+	       visible all the time?
+    Values: 0 or 1
+    Default: 0
+
+Combo1:
+    Question: What colour is used for the last combo?
+    Value: RGB
+    Default: 255,192,0
+    Notes:
+        This is used if beatmap skin is disabled or uses
+	 default colours.
+        This appears last.
+
+Combo2:
+    Question: What colour is used for the first combo?
+    Value: RGB
+    Default: 0,202,0
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears first.
+
+Combo3:
+    Question: What colour is used for the second combo?
+    Value: RGB
+    Default: 18,124,255
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears second, if defined.
+
+Combo4:
+    Question: What colour is used for the third combo?
+    Value: RGB
+    Default: 242,24,57
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears third, if defined.
+
+Combo5:
+    Question: What colour is used for the fourth combo?
+    Value: RGB
+    Default: (empty)
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears fourth, if defined.
+
+Combo6:
+    Question: What colour is used for the fifth combo?
+    Value: RGB
+    Default: (empty)
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears fifth, if defined.
+
+Combo7:
+    Question: What colour is used for the sixth combo?
+    Value: RGB
+    Default: (empty)
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears sixth, if defined.
+
+Combo8:
+    Question: What colour is used for the seventh combo?
+    Value: RGB
+    Default: (empty)
+    Notes:
+        This is used if beatmap skin is disabled 
+	 or uses default colours.
+        This appears seventh, if defined.
+
+InputOverlayText:
+    Question: What colour should the numbers on 
+	       the input keys be tinted in?
+    Value: RGB
+    Default: 0,0,0
+    Notes:
+        This is for osu!standard and osu!catch only..
+        This tints the numbers shown on the input overlay.
+
+MenuGlow:
+    Question: What colour should the spectrum bars 
+	       in the main menu be coloured in?
+    Value: RGB
+    Default: 0,78,155
+    Notes:
+        osu!supporter required
+
+SliderBall:
+    Question: What colour should the default sliderball 
+	       be coloured in?
+    Value: RGB
+    Default: 2,170,255
+    Notes:
+        This is for osu!standard.
+        Default sliderball's colour if tinting is disabled
+	 in options.
+
+SliderBorder:
+    Question: What colour should be used for the sliderborders?
+    Value: RGB
+    Default: 255,255,255
+    Notes:
+        This is for osu!standard only.
+
+SliderTrackOverride:
+    Question: What colour should all sliderbodies
+	       be coloured in?
+    Value: RGB
+    Default: use current combo colour
+    Notes:
+        This is for osu!standard only.
+        Using this will make all slider track colours the same.
+
+SongSelectActiveText:
+    Question: What colour should the text of 
+		the active panel be tinted in?
+    Value: RGB
+    Default: 0,0,0
+
+SongSelectInactiveText:
+    Question: What colour should the text 
+		of the inactive panels be tinted in?
+    Value: RGB
+    Default: 255,255,255
+
+SpinnerBackground:
+    Question: What colour should be added to the 
+		spinner-background?
+    Value: RGB
+    Default: 100,100,100
+
+StarBreakAdditive:
+    Question: What colour should be added to star2 
+		during breaks?
+    Value: RGB
+    Default: 255,182,193
+    Notes:
+        colour of star2 during breaks
+
+
+
+
+
+

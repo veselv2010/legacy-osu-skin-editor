@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿//github ver
+using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
@@ -12,22 +13,27 @@ using System.Windows.Media;
 
 namespace SkinEditor
 {
+    //передавать в метод GetImageBySenderName-чето-там данные о размере объекта в гриде, чтобы в дальнейшем скейлить его в методе до необходимых размеров;
+    //проблема в том, что каждый объект ведет себя по-своему
     public partial class MainWindow : Window
     {
+        private readonly string[] ToolTipLines = File.ReadAllLines("Resources/ToolTips.txt"); //единоразовое считывание
         private int LastItem = 0; //уничтожить
         private byte R, G, B;
         private int ProgressBarFilesMax = 0;
+        private bool OsuPathChanged;
         //public static System.Windows.Threading.DispatcherTimer Animtimer = new System.Windows.Threading.DispatcherTimer(); анимация кнопки skinscan до первого нажатия
         public static List<Image> OnScreenImages = new List<Image>(); //лист со всеми (не со всеми) объектами Image, предназначенными для экспорта
         public static List<string> OnScreenImagesNames = new List<string>(); //это нужно уничтожить в дальнейшем (используется для поиска элементов в основном листе)
         public static List<Image> CopyOnScreenImages = new List<Image>(); //лист с дубликатами некоторых объектов Image (_Copy); выкупить, как спаунить один и тот же объект в нескольких местах (относительные ссылки на него)
         public static List<Image> GridScoreImages = new List<Image>(); //лист с Image из GridScore, нужен для "удобной" работы с ним (не перебирая ~50 элементов в _Copy)(_Score)
+        public static List<object> SkinIniPropertiesObj = new List<object>();
         public MainWindow()
         {
             InitializeComponent();
             ComboBoxExistingSkin.Visibility = Visibility.Hidden;
             ProgressBarExport.Maximum = ProgressBarFilesMax;
-            ComboBoxExistingSkin.Items.Add(SkinWorker.DefaultSkinAbsPath); //вынести этот адрес в SkinWorker
+            ComboBoxExistingSkin.Items.Add(SkinWorker.DefaultSkinAbsPath);
             ComboBoxRankingSymbol.SelectedIndex = 0;
             ranking_a.Visibility = Visibility.Hidden;
             ranking_b.Visibility = Visibility.Hidden;
@@ -62,8 +68,8 @@ namespace SkinEditor
                 MessageBox.Show("Present","Exception"); //отсылка к самой крутой игре в мире
                 return;
             }
-
             TextBoxOsuPath.Background = Brushes.Green;
+
             SkinWorker.GetAllFiles(temp);
             SkinWorker.GetSkinNames(temp);
 
@@ -71,7 +77,8 @@ namespace SkinEditor
             ProgressBarExport.Maximum = SkinWorker.ExistingSkins.Length; 
 
             ComboBoxExistingSkin.Items.Clear(); //чтобы не заполняло дубликатами
-            ComboBoxExistingSkin.Items.Add(SkinWorker.DefaultSkinAbsPath); //вынести этот адрес в SkinWorker
+            ComboBoxExistingSkin.Items.Add(SkinWorker.DefaultSkinAbsPath);
+
             foreach (string elem in SkinWorker.ExistingSkins)
             {
                 ComboBoxExistingSkin.Items.Add(elem);
@@ -102,12 +109,15 @@ namespace SkinEditor
                 if (ClickedImage.Name.Contains("_Copy")) //нажатие на fake
                 {
                     int IndexOfCopy = ClickedImage.Name.IndexOf("_Copy");
-                    int OnScreenIndex = OnScreenImagesNames.IndexOf(ClickedImage.Name.Remove(IndexOfCopy));
+                    string OnScreenOriginName = ClickedImage.Name.Remove(IndexOfCopy);
+                    int OnScreenIndex = OnScreenImagesNames.IndexOf(OnScreenOriginName);
+
                     OnScreenImages[OnScreenIndex].Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
                     CopyOnScreenImages[CopyOnScreenImages.IndexOf(ClickedImage)].Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
+
                     foreach (Image elem in CopyOnScreenImages)
                     {
-                        if (elem.Name.Contains(ClickedImage.Name.Remove(IndexOfCopy)) && elem.Name != ClickedImage.Name)
+                        if (elem.Name.Contains(OnScreenOriginName) && elem.Name != ClickedImage.Name)
                             elem.Source = OnScreenImages[OnScreenIndex].Source;
                     } 
                 }
@@ -121,6 +131,7 @@ namespace SkinEditor
                             elem.Source = OnScreenImages[OnScreenIndex].Source;
                     }
                 }
+                SetCursor();//костыль
             }
         }
 
@@ -179,7 +190,7 @@ namespace SkinEditor
 
         private void Image_SourceUpdated(object sender, DataTransferEventArgs e)
         {
-  
+           //юзлесс ивент
         }
 
         private void ComboBoxExistingSkin_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -196,6 +207,8 @@ namespace SkinEditor
                 {
                     elem.Source = SkinWorker.GetImageBySenderName(path, elem);
                 }
+                ButtonSkinIni_Click(sender, e);
+                SetCursor();
             }
         }
 
@@ -234,7 +247,6 @@ namespace SkinEditor
         {
             string path = DebugTextBoxPath1.Text;
             DebugTextBox.Text = SkinWorker.Name2FileNameConv(path, RadioButtonFileSize2.IsChecked.Value);
-
         }
 
         private void DebugButtonShowSources_Click(object sender, RoutedEventArgs e)
@@ -254,12 +266,51 @@ namespace SkinEditor
         private void ButtonSkinIni_Click(object sender, RoutedEventArgs e)
         {
             string SkinIniPath = SkinIniParser.SkinIniInit(ComboBoxExistingSkin.SelectedValue as string);
+            foreach (object elem in SkinIniPropertiesObj)
+            {
+                Type temp = elem.GetType();
+                if (temp.Name == "TextBox")
+                    ((TextBox)elem).Text = SkinIniParser.GetPropertyBySenderName(((TextBox)elem).Name);
+                else if(temp.Name == "CheckBox")
+                {
+                    string tempstring = SkinIniParser.GetPropertyBySenderName(((CheckBox)elem).Name);
+                    if (tempstring != "")
+                    {
+                        int tempf = int.Parse(tempstring);
+                        ((CheckBox)elem).IsChecked = Convert.ToBoolean(tempf);
+                    }
+                    else
+                    {
+                        ((CheckBox)elem).IsChecked = Convert.ToBoolean(0); //костыль
+                        ((CheckBox)elem).Background = Brushes.Yellow;
+                        ((CheckBox)elem).ToolTip = "skin.ini does not contain this line";
+                    }
+                }
+                else
+                {
+                    string colours = SkinIniParser.GetPropertyBySenderName(((Frame)elem).Name);
+                    var TempFrame = elem as Frame;
+                    if (colours == "")
+                    {
+                        TempFrame.ToolTip = "no value to work with";
+                        TempFrame.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                        TempFrame.Background.Opacity = 0.01;
+                    }
+                    else
+                    {
+                        string[] RgbColours = colours.Split(',');
+                        byte r = byte.Parse(RgbColours[0]);
+                        byte g = byte.Parse(RgbColours[1]);
+                        byte b = byte.Parse(RgbColours[2]);
+                        TempFrame.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                        TempFrame.Background.Opacity = 1;
+                        TempFrame.ToolTip = "everything is ok!";
+                    }
+                }
 
-            Name.Text = SkinIniParser.GetPropertyBySenderName(Name.Name);/////////////////////////////////////////////////////////////////////////
-            Author.Text = SkinIniParser.GetPropertyBySenderName(Author.Name);/////////////////////////////////////////////////////////////////////////
-            Version.Text = SkinIniParser.GetPropertyBySenderName(Version.Name);//запилить ивент
+            }
             Directory.CreateDirectory("export");
-            File.Copy(SkinIniPath, "export\\" + "skin.ini", true); //сделать балдежное окно с галочками при экспорте этого файла        }
+            File.Copy(SkinIniPath, "export\\" + "skin.ini", true); //сделать балдежное окно с галочками при экспорте этого файла
         }
 
         private void RadioButtonGameOver_Checked(object sender, RoutedEventArgs e)
@@ -280,18 +331,18 @@ namespace SkinEditor
         private void ComboBoxRankingSymbol_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LabelStatus.Content = $"{ComboBoxRankingSymbol.SelectedValue} visibility changed!";
-            int i = OnScreenImagesNames.IndexOf(ComboBoxRankingSymbol.SelectedValue as string);
+            int OnScreenIndex = OnScreenImagesNames.IndexOf(ComboBoxRankingSymbol.SelectedValue as string);
             if (LastItem != 0)
             {
                 OnScreenImages[LastItem].Visibility = Visibility.Hidden;
-                OnScreenImages[i].Visibility = Visibility.Visible;
-                LastItem = i;
+                OnScreenImages[OnScreenIndex].Visibility = Visibility.Visible;
+                LastItem = OnScreenIndex;
                 return;
             }
-            if (i != -1 && LastItem == 0)
+            if (OnScreenIndex != -1 && LastItem == 0)
             {
-                OnScreenImages[i].Visibility = Visibility.Visible;
-                LastItem = i;
+                OnScreenImages[OnScreenIndex].Visibility = Visibility.Visible;
+                LastItem = OnScreenIndex;
                 return;
             }
         }
@@ -391,13 +442,7 @@ namespace SkinEditor
 
         private void ButtonCursor_Click(object sender, RoutedEventArgs e)
         {
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
-            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap, 40, 40); //судя по рунам цифры в перегрузках  - расположения "точки", которой пользователь кликает
 
-            //System.Windows.Forms.Cursors.PanNorth.Handle
-            SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
-            GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
-           // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
 
         }
 
@@ -411,13 +456,70 @@ namespace SkinEditor
 
         private void TextBoxSkinIni_Initialized(object sender, EventArgs e)
         {
-          
-            
+            SkinIniPropertiesObj.Add(sender);
         }
 
-        private void TextBoxSkinIni_SomeUselessEvent(object sender, QueryContinueDragEventArgs e)
+        private void Version_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Version.ToolTip = SkinIniParser.VersionValidator(Version.Text);
+            if (!SkinIniParser.IsVersionValid)
+                Version.Background = Brushes.Red;
+            else
+                Version.Background = Brushes.Green;
+        }
 
+        private void SkinIniProperty_MouseEnter(object sender, MouseEventArgs e)
+        {
+            LabelToolTipSkinIniProp.Content = "";
+            string[] ToToolTip = SkinIniParser.GetToolTipLines(sender, ToolTipLines);
+            foreach(string elem in ToToolTip)
+            {
+                LabelToolTipSkinIniProp.Content += elem + "\n";
+            }
+            Type SenderType = sender.GetType();
+            if (SenderType.Name == "TextBox")
+            {
+                LabelToolTipSkinIniCurrentProp.Content = $"Current: {((TextBox)sender).Text}";
+                return;
+            }
+            if (SenderType.Name == "CheckBox")
+            {
+                LabelToolTipSkinIniCurrentProp.Content = $"Current: {((CheckBox)sender).IsChecked.ToString()}";
+                return;
+            }
+            if(SenderType.Name == "Frame")
+            {
+                LabelToolTipSkinIniCurrentProp.Content = $"Current: {((Frame)sender).Background}";
+                return;
+            }
+        }
+
+        private void CustomComboBurstSounds_KeyDown(object sender, KeyEventArgs e)
+        {
+           /* string temp = Convert.ToString(e.Key); //уничтожить
+            if (!char.IsDigit(temp[temp.Length - 1]) || Equals(temp, ','))
+            {
+                e.Handled = true;
+            } */
+        }
+
+        private void ColourFrame_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ColourPicker picker = new ColourPicker(sender);
+            picker.Show();
+        }
+
+        private void SkinIniText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var Sender = sender as TextBox;
+            Sender.Width = Sender.Text.Length * 7;
+            Sender.MinWidth = 160; //вынести как заранее заданное свойство
+            Sender.MaxWidth = 500;
+        }
+
+        private void TextBoxOsuPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBoxOsuPath.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
 
         private void DebugTextBoxColour_TextChanged(object sender, TextChangedEventArgs e) //не стал раскладывать на три разных ивента 
@@ -440,9 +542,15 @@ namespace SkinEditor
             DebugRectangle1.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
         }
 
-        private void TextBoxSkinIni_Parse(object sender, EventArgs e)
+        private void SetCursor()
         {
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
+            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap); //судя по рунам цифры в перегрузках  - расположения "точки", которой пользователь кликает
 
+            //System.Windows.Forms.Cursors.PanNorth.Handle
+            SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
+            GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
+            // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
         }
     }
 }
