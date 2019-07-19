@@ -12,6 +12,7 @@ namespace SkinEditor
 {
     class SkinIniParser
     {
+        public static Brush CurrentColour;
         public static bool IsVersionValid;
         private static readonly List<string> AllowedVersions = new List<string>{ "1.0", "1", "2.0", "2", "2.1", "2.2", "2.3", "2.4", "2.5", "latest", "User" };
         private static string SkinIniPathPrivate;

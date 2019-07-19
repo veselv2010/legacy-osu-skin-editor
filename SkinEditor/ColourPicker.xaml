@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SkinEditor"
         mc:Ignorable="d"
-        Title="ColourPicker" Height="350" Width="400">
+        Title="ColourPicker" Height="263" Width="329" Closing="Window_Closing">
     <Grid>
-        <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="160" Margin="222,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="160"/>
-        <TextBox x:Name="TextBoxColourR" HorizontalAlignment="Left" Height="23" Margin="97,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColour_TextChanged"/>
-        <TextBox x:Name="TextBoxColourG" HorizontalAlignment="Left" Height="23" Margin="97,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColour_TextChanged"/>
-        <TextBox x:Name="TextBoxColourB" HorizontalAlignment="Left" Height="23" Margin="97,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColour_TextChanged"/>
-        <TextBox x:Name="TextBoxColourHEX" HorizontalAlignment="Left" Height="23" Margin="97,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColour_TextChanged"/>
+        <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" Height="160" Margin="138,6,0,0" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160"/>
+        <TextBox x:Name="TextBoxColourR" Height="23" Margin="12,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
+        <TextBox x:Name="TextBoxColourG" Height="23" Margin="12,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
+        <TextBox x:Name="TextBoxColourB" Height="23" Margin="12,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
+        <TextBox x:Name="TextBoxColourHEX" Height="23" Margin="12,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
+        <Button x:Name="button" Content="Button" Margin="112,199,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" Click="Button_Click"/>
 
     </Grid>
 </Window>

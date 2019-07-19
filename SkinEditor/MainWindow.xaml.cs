@@ -182,9 +182,10 @@ namespace SkinEditor
             foreach (Image elem in OnScreenImages)
             {
                 File.Copy(elem.Source.ToString().Remove(0, 8), "export\\" + SkinWorker.Name2FileNameConv(elem.Source.ToString(), false), true);
-                ZipExporter.AddFileToZip("exportzip.zip", elem.Source.ToString().Remove(0, 8)); //it just works
+                ZipExporter.AddFileToZip("exportzip.osk", elem.Source.ToString().Remove(0, 8)); //it just works
                 ProgressBarExport.Value++; //factory new
             }
+            ZipExporter.AddFileToZip("exportzip.osk", ComboBoxExistingSkin.SelectedValue + "/skin.ini");
             Process.Start("export\\");
         }
 
@@ -506,9 +507,7 @@ namespace SkinEditor
         private void ColourFrame_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ColourPicker picker = new ColourPicker(sender);
-            picker.Show();
-            picker.Unloaded += new RoutedEventHandler(ColourChange);
-           // Combo1.Background = picker.RectangleColour.Fill;
+            picker.ShowDialog();
         }
 
         private void SkinIniText_TextChanged(object sender, TextChangedEventArgs e)
@@ -553,10 +552,6 @@ namespace SkinEditor
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
             GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
             // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
-        }
-        private void ColourChange(object sender, EventArgs e)
-        {
-          //
         }
     }
 }

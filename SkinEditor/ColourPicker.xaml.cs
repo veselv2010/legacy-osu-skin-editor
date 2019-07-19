@@ -19,6 +19,7 @@ namespace SkinEditor
     /// </summary>
     public partial class ColourPicker : Window
     {
+        private static object Sender;
         private static string BackgroundColour;
         private static byte R;
         private static byte G;
@@ -27,6 +28,7 @@ namespace SkinEditor
         {
             InitializeComponent();
             BackgroundColour = SenderBackground(sender);
+            Sender = sender;
             GetCurrentColor();
         }
 
@@ -85,6 +87,17 @@ namespace SkinEditor
                 B = Convert.ToByte(TextBoxColourB.Text);
 
             RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var CurrentFrame = Sender as Frame;
+            CurrentFrame.Background = RectangleColour.Fill;
         }
     }
 }
