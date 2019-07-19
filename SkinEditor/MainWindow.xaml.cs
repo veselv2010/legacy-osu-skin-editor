@@ -1,5 +1,4 @@
-﻿//github ver
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace SkinEditor
         private int LastItem = 0; //уничтожить
         private byte R, G, B;
         private int ProgressBarFilesMax = 0;
-        private bool OsuPathChanged;
         //public static System.Windows.Threading.DispatcherTimer Animtimer = new System.Windows.Threading.DispatcherTimer(); анимация кнопки skinscan до первого нажатия
         public static List<Image> OnScreenImages = new List<Image>(); //лист со всеми (не со всеми) объектами Image, предназначенными для экспорта
         public static List<string> OnScreenImagesNames = new List<string>(); //это нужно уничтожить в дальнейшем (используется для поиска элементов в основном листе)
@@ -177,7 +175,7 @@ namespace SkinEditor
         private void ButtonSkinExport_Click(object sender, RoutedEventArgs e)
         {
             ProgressBarExport.Value = 0;
-
+            File.WriteAllLines("export\\skin.ini", SkinIniParser.SkinIniToExport());
             Directory.CreateDirectory("export");
             foreach (Image elem in OnScreenImages)
             {
@@ -185,7 +183,7 @@ namespace SkinEditor
                 ZipExporter.AddFileToZip("exportzip.osk", elem.Source.ToString().Remove(0, 8)); //it just works
                 ProgressBarExport.Value++; //factory new
             }
-            ZipExporter.AddFileToZip("exportzip.osk", ComboBoxExistingSkin.SelectedValue + "/skin.ini");
+            ZipExporter.AddFileToZip("exportzip.osk", "export\\skin.ini");
             Process.Start("export\\");
         }
 
@@ -355,23 +353,7 @@ namespace SkinEditor
 
         private void TextBoxRankingScore_TextChanged(object sender, TextChangedEventArgs e) //фича из разряда юзлесс
         {                                                                                   //потом надо это разгрузить, написание цифр в ранкедскоре не s m o o t h (в дебаге)
-            /*                                                                              //затестить регекс
-            char[] tempchar = TextBoxRankingScore.Text.ToCharArray();
-                if (tempchar.Length != 0)
-                {
-                int tempcharlength = tempchar.Length - 1; //последняя цифра с текстбокса
-                foreach (Image elem in CopyOnScreenImages)
-                {
-                    if (elem.Name.Contains("_Score" + tempcharlength))
-                    {                                                           //переделать на работу с листом
-                        Image temp = new Image{Name = $"score_{tempchar[tempcharlength]}"};
-                        elem.Source = SkinWorker.GetImageBySenderName(ComboBoxExistingSkin.SelectedValue.ToString(), temp);
-                        break;
-                    }
-                } 
-
-            } //делает тоже самое, но не умеет вставлять символы в середину строки; работает без предварительного создания дополнительного листа
-            */
+                                                                                        //затестить регекс
             char[] tempchar = new char[8];
             for (int j = 0; j < 8; j++)
             {
@@ -546,7 +528,7 @@ namespace SkinEditor
         private void SetCursor()
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
-            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap); //судя по рунам цифры в перегрузках  - расположения "точки", которой пользователь кликает
+            System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap);
 
             //System.Windows.Forms.Cursors.PanNorth.Handle
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);

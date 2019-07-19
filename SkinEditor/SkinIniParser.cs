@@ -1,13 +1,9 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Controls;
 namespace SkinEditor
 {
     class SkinIniParser
@@ -84,8 +80,46 @@ namespace SkinEditor
                 i++;
                 j++;
             }
-
-             return ToReturn;
+            return ToReturn;
+        }
+        public static string[] SkinIniToExport()
+        {
+            string[] ToExport = new string[MainWindow.SkinIniPropertiesObj.Count + 20];
+            int Counter = 1;
+            ToExport[0] = "[General]";
+            foreach (object elem in MainWindow.SkinIniPropertiesObj)
+            {
+                Type ElemType = elem.GetType();
+                if (ElemType.Name == "TextBox")
+                {
+                    var TempTextBox = elem as TextBox;
+                    ToExport[Counter] = $"{TempTextBox.Name}: {TempTextBox.Text}";
+                    Counter++;
+                }
+                if(ElemType.Name == "CheckBox")
+                {
+                    var TempCheckBox = elem as CheckBox;
+                    ToExport[Counter] = $"{TempCheckBox.Name}: {TempCheckBox.IsChecked.Value}";
+                    Counter++;
+                }
+                if (ElemType.Name == "Frame")
+                {
+                    ToExport[Counter] = "[Colours]";
+                    Counter++;
+                    break;
+                }
+            }
+            for (int i = Counter - 2; i < MainWindow.SkinIniPropertiesObj.Count; i++)
+            {
+                var TempFrame = MainWindow.SkinIniPropertiesObj[i] as Frame;
+                string BackgroundColour = TempFrame.Background.ToString().Remove(0, 3);
+                int r = Convert.ToInt32($"{BackgroundColour[0] + BackgroundColour[1]}", 16);
+                int g = Convert.ToInt32($"{BackgroundColour[2] + BackgroundColour[3]}", 16);
+                int b = Convert.ToInt32($"{BackgroundColour[4] + BackgroundColour[5]}", 16);
+                ToExport[Counter] = $"{TempFrame.Name}: {r},{g},{b}";
+                Counter++;
+            }
+            return ToExport;
         }
     }
 }
