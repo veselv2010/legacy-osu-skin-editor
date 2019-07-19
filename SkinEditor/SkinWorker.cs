@@ -56,17 +56,14 @@ namespace SkinEditor
 
         public static BitmapImage GetImageByDirectPath(string path)//лень писать new Bitmapimage(new Uri())
         {
-            BitmapImage NewImage;
             try
             {
-                NewImage = new BitmapImage(new Uri(path));
+                return new BitmapImage(new Uri(path));
             }
             catch (IOException)
             {
-                NewImage = null;
-
+                return null;
             }
-            return NewImage;
         }
         #endregion
 
@@ -77,7 +74,8 @@ namespace SkinEditor
             for (int i = ImageSource.Length - 4; i > 0; i--)
             {
                 RemovableSymb--;
-                if (Equals('/', ImageSource[i]) || Equals('\\', ImageSource[i]) || Equals(@"\", ImageSource[i]))
+                if ('/' == ImageSource[i] 
+                || '\\' == ImageSource[i])
                     break;
             }
             return ImageSource.Remove(0, RemovableSymb).Replace("_", "-"); 
