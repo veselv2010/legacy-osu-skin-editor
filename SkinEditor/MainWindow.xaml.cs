@@ -507,6 +507,8 @@ namespace SkinEditor
         {
             ColourPicker picker = new ColourPicker(sender);
             picker.Show();
+            picker.Unloaded += new RoutedEventHandler(ColourChange);
+           // Combo1.Background = picker.RectangleColour.Fill;
         }
 
         private void SkinIniText_TextChanged(object sender, TextChangedEventArgs e)
@@ -551,6 +553,10 @@ namespace SkinEditor
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
             GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
             // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
+        }
+        private void ColourChange(object sender, EventArgs e)
+        {
+          //
         }
     }
 }

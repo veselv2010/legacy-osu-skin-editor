@@ -30,8 +30,6 @@ namespace SkinEditor
         public static extern bool GetIconInfo(IntPtr hIcon, ref IconInfo pIconInfo);
 
         [DllImport("user32.dll")]
-        .0
-        0
         public static extern IntPtr CreateIconIndirect(ref IconInfo icon);
 
         public static Cursor CreateCursor(Bitmap bmp) //, int xHotSpot, int yHotSpot)
