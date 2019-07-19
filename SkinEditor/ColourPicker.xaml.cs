@@ -34,9 +34,15 @@ namespace SkinEditor
 
         private void GetCurrentColor()
         {
-            R = Convert.ToByte($"{BackgroundColour[3]}" + $"{BackgroundColour[4]}", 16);
-            G = Convert.ToByte($"{BackgroundColour[5]}" + $"{BackgroundColour[6]}", 16);
-            B = Convert.ToByte($"{BackgroundColour[7]}" + $"{BackgroundColour[8]}", 16);
+            R = Convert.ToByte(BackgroundColour[3].ToString() 
+                             + BackgroundColour[4].ToString(), 16);
+
+            G = Convert.ToByte(BackgroundColour[5].ToString() 
+                             + BackgroundColour[6].ToString(), 16);
+
+            B = Convert.ToByte(BackgroundColour[7].ToString() 
+                             + BackgroundColour[8].ToString(), 16);
+
             TextBoxColourR.Text = R.ToString();
             TextBoxColourG.Text = G.ToString();
             TextBoxColourB.Text = B.ToString();
@@ -54,11 +60,11 @@ namespace SkinEditor
                 {
                     try
                     {
-                        R = Convert.ToByte($"{TextBoxColourHEX.Text[1]}" + $"{TextBoxColourHEX.Text[2]}", 16);
+                        R = Convert.ToByte(TextBoxColourHEX.Text[1].ToString() + TextBoxColourHEX.Text[2].ToString(), 16);
                         TextBoxColourR.Text = R.ToString();
-                        G = Convert.ToByte($"{TextBoxColourHEX.Text[3]}" + $"{TextBoxColourHEX.Text[4]}", 16);
+                        G = Convert.ToByte(TextBoxColourHEX.Text[3].ToString() + TextBoxColourHEX.Text[4].ToString(), 16);
                         TextBoxColourG.Text = G.ToString();
-                        B = Convert.ToByte($"{TextBoxColourHEX.Text[5]}" + $"{TextBoxColourHEX.Text[6]}", 16);
+                        B = Convert.ToByte(TextBoxColourHEX.Text[5].ToString() + TextBoxColourHEX.Text[6].ToString(), 16);
                         TextBoxColourB.Text = B.ToString();
                         RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
                         return;
