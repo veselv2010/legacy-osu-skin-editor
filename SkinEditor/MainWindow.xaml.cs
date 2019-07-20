@@ -25,7 +25,6 @@ namespace SkinEditor
         //public static System.Windows.Threading.DispatcherTimer Animtimer = new System.Windows.Threading.DispatcherTimer(); анимация кнопки skinscan до первого нажатия
         public static List<Image> OnScreenImages = new List<Image>(); //лист со всеми (не со всеми) объектами Image, предназначенными для экспорта
         public static List<string> OnScreenImagesNames = new List<string>(); //это нужно уничтожить в дальнейшем (используется для поиска элементов в основном листе)
-        public static List<Image> CopyOnScreenImages = new List<Image>(); //лист с дубликатами некоторых объектов Image (_Copy); выкупить, как спаунить один и тот же объект в нескольких местах (относительные ссылки на него)
         public static List<Image> GridScoreImages = new List<Image>(); //лист с Image из GridScore, нужен для "удобной" работы с ним (не перебирая ~50 элементов в _Copy)(_Score)
         public static List<object> SkinIniPropertiesObj = new List<object>();
         public MainWindow()
@@ -106,31 +105,9 @@ namespace SkinEditor
             };
             if (myDialog.ShowDialog() == true)
             {
-                if (ClickedImage.Name.Contains("_Copy")) //нажатие на fake
-                {
-                    int IndexOfCopy = ClickedImage.Name.IndexOf("_Copy");
-                    string OnScreenOriginName = ClickedImage.Name.Remove(IndexOfCopy);
-                    int OnScreenIndex = OnScreenImagesNames.IndexOf(OnScreenOriginName);
-
-                    OnScreenImages[OnScreenIndex].Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
-                    CopyOnScreenImages[CopyOnScreenImages.IndexOf(ClickedImage)].Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
-
-                    foreach (Image elem in CopyOnScreenImages)
-                    {
-                        if (elem.Name.Contains(OnScreenOriginName) && elem.Name != ClickedImage.Name)
-                            elem.Source = OnScreenImages[OnScreenIndex].Source;
-                    } 
-                }
-                else //нажатие на оригинальный элемент
-                {
-                    int OnScreenIndex = OnScreenImagesNames.IndexOf(ClickedImage.Name);
-                    OnScreenImages[OnScreenIndex].Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
-                    foreach (Image elem in CopyOnScreenImages)
-                    {
-                        if (elem.Name.Contains(ClickedImage.Name))
-                            elem.Source = OnScreenImages[OnScreenIndex].Source;
-                    }
-                }
+                
+                ClickedImage.Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
+               
                 SetCursor();//костыль
             }
         }
@@ -204,10 +181,6 @@ namespace SkinEditor
                     elem.Source = SkinWorker.GetImageBySenderName(path, elem);
                 }
 
-                foreach (Image elem in CopyOnScreenImages)
-                {
-                    elem.Source = SkinWorker.GetImageBySenderName(path, elem);
-                }
                 ButtonSkinIni_Click(sender, e);
                 SetCursor();
             }
@@ -223,15 +196,16 @@ namespace SkinEditor
                 ProgressBarFilesMax++; //factory new
                 return;
             }
-            else
-            {
-                CopyOnScreenImages.Add(InitImage);
-            }
 
             if (InitImage.Name.Contains("_Score"))
             {
                 GridScoreImages.Add(InitImage);
             }
+        }
+
+        private void TextBoxSkinIni_Initialized(object sender, EventArgs e)
+        {
+            SkinIniPropertiesObj.Add(sender);
         }
 
         private void Image_Loaded(object sender, RoutedEventArgs e) // добавление кода сюда приведет к увеличению времени затупа в переходах между экранами
@@ -361,22 +335,23 @@ namespace SkinEditor
             
             if (ComboBoxExistingSkin.SelectedValue != null)
             {
-                int i = 0;
+                int ElementIndex = 0;
                 foreach (char elem in tempchar)
                 {
                     if (elem == ' ')
                     {
-                        GridScoreImages[i].Visibility = Visibility.Hidden;
+                        GridScoreImages[ElementIndex].Visibility = Visibility.Hidden;
                     }
                     else
                     {
-                        Image temp = new Image { Name = $"score_{elem}" };
-                        GridScoreImages[i].Source = SkinWorker.GetImageBySenderName(ComboBoxExistingSkin.SelectedValue.ToString(), temp);
-                        GridScoreImages[i].Visibility = Visibility.Visible;
-                        GridScoreImages[i].Name = GridScoreImages[i].Name.Replace
-                            ($"score_{GridScoreImages[i].Name[6]}", 
-                            $"score_{GridScoreImages[i].Source.ToString()[GridScoreImages[i].Source.ToString().Length - 5]}"); // L O L
-                        i++;
+                        Binding tempbind = new Binding();
+                        tempbind.ElementName = $"score_{elem}";
+                        tempbind.Path = new PropertyPath("Source");
+                        tempbind.Mode = BindingMode.TwoWay;
+
+                        GridScoreImages[ElementIndex].SetBinding(Image.SourceProperty, tempbind);
+                        GridScoreImages[ElementIndex].Visibility = Visibility.Visible;
+                        ElementIndex++;
                     }
                 }
             }
@@ -412,11 +387,6 @@ namespace SkinEditor
             cursor.Width = 80 * SliderSizeMul.Value;
             cursormiddle.Height = 40 * SliderSizeMul.Value;
             cursormiddle.Width = 40 * SliderSizeMul.Value;
-        }
-
-        private void TextBoxSkinIni_Initialized(object sender, EventArgs e)
-        {
-            SkinIniPropertiesObj.Add(sender);
         }
 
         private void Version_TextChanged(object sender, TextChangedEventArgs e)
@@ -458,14 +428,6 @@ namespace SkinEditor
         {
             ColourPicker picker = new ColourPicker(sender);
             picker.ShowDialog();
-        }
-
-        private void SkinIniText_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var Sender = sender as TextBox;
-            Sender.Width = Sender.Text.Length * 7;
-            Sender.MinWidth = 160; //вынести как заранее заданное свойство
-            Sender.MaxWidth = 500;
         }
 
         private void TextBoxOsuPath_TextChanged(object sender, TextChangedEventArgs e)
