@@ -8,7 +8,6 @@ namespace SkinEditor
 {
     class SkinIniParser
     {
-        public static Brush CurrentColour;
         public static bool IsVersionValid;
         private static readonly List<string> AllowedVersions = new List<string>{ "1.0", "1", "2.0", "2", "2.1", "2.2", "2.3", "2.4", "2.5", "latest", "User" };
         private static string SkinIniPathPrivate;
@@ -59,8 +58,8 @@ namespace SkinEditor
 
         public static string[] GetToolTipLines(object sender, string[] ToolTipLines)
         {
-            int i = 0;
-            int j = 0;
+            int NeededPropertyIndex = 0;
+            int ToolTipLineIndex = 0;
             string[] ToReturn = new string[20]; //рандомное число
 
             var Sender = sender as FrameworkElement;
@@ -69,16 +68,16 @@ namespace SkinEditor
             {
                 if (elem.Contains(Sender.Name))
                 {
-                    int IndexOfSenderName = i;
+                    int IndexOfSenderName = NeededPropertyIndex;
                      break;
                 }
-                i++;
+                NeededPropertyIndex++;
             }
-            while (ToolTipLines[i] != "")
+            while (ToolTipLines[NeededPropertyIndex] != "")
             {
-                ToReturn[j] = ToolTipLines[i];
-                i++;
-                j++;
+                ToReturn[ToolTipLineIndex] = ToolTipLines[NeededPropertyIndex];
+                NeededPropertyIndex++;
+                ToolTipLineIndex++;
             }
             return ToReturn;
         }
@@ -112,11 +111,15 @@ namespace SkinEditor
             for (int i = Counter - 2; i < MainWindow.SkinIniPropertiesObj.Count; i++)
             {
                 var TempFrame = MainWindow.SkinIniPropertiesObj[i] as Frame;
-                string BackgroundColour = TempFrame.Background.ToString().Remove(0, 3);
-                int r = Convert.ToInt32($"{BackgroundColour[0] + BackgroundColour[1]}", 16);
-                int g = Convert.ToInt32($"{BackgroundColour[2] + BackgroundColour[3]}", 16);
-                int b = Convert.ToInt32($"{BackgroundColour[4] + BackgroundColour[5]}", 16);
+
+                byte[] Colours = GetRgbColours(TempFrame.Background);
+
+                byte r = Colours[0];
+                byte g = Colours[1];
+                byte b = Colours[2];
+
                 ToExport[Counter] = $"{TempFrame.Name}: {r},{g},{b}";
+
                 Counter++;
             }
             return ToExport;
@@ -160,7 +163,7 @@ namespace SkinEditor
             ToReturn[2] = B;
             return ToReturn;
         }
-        #endregion
+
         public static byte GetSingleChannel(string Colour)
         {
             if(Colour != "" && Colour.Length <= 3 && int.Parse(Colour) < 256)
@@ -168,5 +171,6 @@ namespace SkinEditor
             else
                 return 0;
         }
+        #endregion
     }
 }

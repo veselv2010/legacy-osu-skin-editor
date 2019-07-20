@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SkinEditor"
         mc:Ignorable="d"
-        Title="ColourPicker" Height="263" Width="329" Closing="Window_Closing">
+        Title="ColourPicker" Height="233" Width="289.5" Closing="Window_Closing" ResizeMode="NoResize">
     <Grid>
-        <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" Height="160" Margin="138,6,0,0" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160"/>
-        <TextBox x:Name="TextBoxColourR" Height="23" Margin="12,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120" PreviewTextInput="TextBox_NumberInput"/>
-        <TextBox x:Name="TextBoxColourG" Height="23" Margin="12,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
-        <TextBox x:Name="TextBoxColourB" Height="23" Margin="12,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
-        <TextBox x:Name="TextBoxColourHEX" Height="23" Margin="12,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
-        <Button x:Name="button" Content="Button" Margin="112,199,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" Click="Button_Click"/>
+        <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" Height="128" Margin="121,10,0,0" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Left" Width="143"/>
+        <TextBox x:Name="TextBoxColourR" Height="23" Margin="54,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="62" PreviewTextInput="TextBox_NumberInput"/>
+        <TextBox x:Name="TextBoxColourG" Height="23" Margin="54,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="62"/>
+        <TextBox x:Name="TextBoxColourB" Height="23" Margin="54,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="62"/>
+        <TextBox x:Name="TextBoxColourHEX" Height="23" Margin="54,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="62"/>
+        <Button x:Name="button" Content="Close" Margin="100,160,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="74" Click="Button_Click"/>
+        <Label x:Name="label" Content="R" HorizontalAlignment="Left" Margin="6,11,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy" Content="G" HorizontalAlignment="Left" Margin="5,39,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy1" Content="B" HorizontalAlignment="Left" Margin="6,67,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy2" Content="HEX" HorizontalAlignment="Left" Margin="6,112,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
