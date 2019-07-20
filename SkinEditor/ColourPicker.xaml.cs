@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -19,11 +20,9 @@ namespace SkinEditor
     /// </summary>
     public partial class ColourPicker : Window
     {
+        private readonly Regex Numbers = new Regex("[^0-9]+");
         private static object Sender;
-        private static string BackgroundColour;
-        private static byte R;
-        private static byte G;
-        private static byte B;
+        private static Brush BackgroundColour;
         public ColourPicker(object sender)
         {
             InitializeComponent();
@@ -34,23 +33,16 @@ namespace SkinEditor
 
         private void GetCurrentColor()
         {
-            R = Convert.ToByte(BackgroundColour[3].ToString() 
-                             + BackgroundColour[4].ToString(), 16);
+            byte[] Colours = SkinIniParser.GetRgbColours(BackgroundColour);
 
-            G = Convert.ToByte(BackgroundColour[5].ToString() 
-                             + BackgroundColour[6].ToString(), 16);
-
-            B = Convert.ToByte(BackgroundColour[7].ToString() 
-                             + BackgroundColour[8].ToString(), 16);
-
-            TextBoxColourR.Text = R.ToString();
-            TextBoxColourG.Text = G.ToString();
-            TextBoxColourB.Text = B.ToString();
-            TextBoxColourHEX.Text = BackgroundColour.Remove(1, 2);
-            RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
+            TextBoxColourR.Text = Colours[0].ToString();
+            TextBoxColourG.Text = Colours[1].ToString();
+            TextBoxColourB.Text = Colours[2].ToString();
+            TextBoxColourHEX.Text = BackgroundColour.ToString().Remove(1, 2);
+            RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(Colours[0], Colours[1], Colours[2]));
         }
 
-        private string SenderBackground(object sender) => ((Frame)sender).Background.ToString();
+        private Brush SenderBackground(object sender) => ((Frame)sender).Background;
 
         private void TextBoxColour_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -60,13 +52,14 @@ namespace SkinEditor
                 {
                     try
                     {
-                        R = Convert.ToByte(TextBoxColourHEX.Text[1].ToString() + TextBoxColourHEX.Text[2].ToString(), 16);
-                        TextBoxColourR.Text = R.ToString();
-                        G = Convert.ToByte(TextBoxColourHEX.Text[3].ToString() + TextBoxColourHEX.Text[4].ToString(), 16);
-                        TextBoxColourG.Text = G.ToString();
-                        B = Convert.ToByte(TextBoxColourHEX.Text[5].ToString() + TextBoxColourHEX.Text[6].ToString(), 16);
-                        TextBoxColourB.Text = B.ToString();
-                        RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
+                        string HexColour = TextBoxColourHEX.Text.Insert(1, "FF");
+                        byte[] Colours = SkinIniParser.GetRgbColours(HexColour);
+
+                        TextBoxColourR.Text = Colours[0].ToString();
+                        TextBoxColourG.Text = Colours[1].ToString();                       
+                        TextBoxColourB.Text = Colours[2].ToString();
+
+                        RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(Colours[0], Colours[1], Colours[2]));
                         return;
                     }
                     catch (FormatException)
@@ -77,6 +70,7 @@ namespace SkinEditor
                 return;
             }
 
+            byte R, G, B;
             var Sender = sender as TextBox;
             if (Sender.Text != "" && int.Parse(Sender.Text) > 256)
             {
@@ -85,14 +79,13 @@ namespace SkinEditor
             }
             Sender.Background = Brushes.White;
 
-            if (TextBoxColourR.Text != "" && int.Parse(TextBoxColourR.Text) < 256)
-                R = Convert.ToByte(TextBoxColourR.Text);
-            if (TextBoxColourG.Text != "" && int.Parse(TextBoxColourG.Text) < 256)
-                G = Convert.ToByte(TextBoxColourG.Text);
-            if (TextBoxColourB.Text != "" && int.Parse(TextBoxColourB.Text) < 256)
-                B = Convert.ToByte(TextBoxColourB.Text);
+            R = SkinIniParser.GetSingleChannel(TextBoxColourR.Text);
+            G = SkinIniParser.GetSingleChannel(TextBoxColourG.Text);
+            B = SkinIniParser.GetSingleChannel(TextBoxColourB.Text);
 
             RectangleColour.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
+
+            TextBoxColourHEX.Text = RectangleColour.Fill.ToString().Remove(1, 2);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -104,6 +97,11 @@ namespace SkinEditor
         {
             var CurrentFrame = Sender as Frame;
             CurrentFrame.Background = RectangleColour.Fill;
+        }
+
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Numbers.IsMatch(e.Text);
         }
     }
 }

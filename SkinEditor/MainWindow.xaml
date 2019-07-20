@@ -131,7 +131,7 @@
                     <Image x:Name="ranking_d" HorizontalAlignment="Left" Height="261" Margin="700,105,0,0" VerticalAlignment="Top" Width="262" MouseLeftButtonDown="Image_MouseLeftButtonDown" Source="Default/ranking-d.png" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" SourceUpdated="Image_SourceUpdated" Initialized="Image_Initialized" Loaded="Image_Loaded"/>
                     <Image x:Name="menu_back_Copy" HorizontalAlignment="Left" Height="80" Margin="2,450,0,0" VerticalAlignment="Top" Width="180" MouseLeftButtonDown="Image_MouseLeftButtonDown" Source="Default/menu-back.png" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" SourceUpdated="Image_SourceUpdated" Loaded="Image_Loaded" Initialized="Image_Initialized"/>
                     <ComboBox x:Name="ComboBoxRankingSymbol" HorizontalAlignment="Left" Margin="2,535,0,-27" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxRankingSymbol_SelectionChanged"/>
-                    <TextBox x:Name="TextBoxRankingScore" HorizontalAlignment="Left" Height="23" Margin="332,534,0,-27" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="TextBoxRankingScore_TextChanged" UndoLimit="6" FontSize="14" MaxLength="8" KeyDown="TextBoxRankingScore_KeyDown"/>
+                    <TextBox x:Name="TextBoxRankingScore" HorizontalAlignment="Left" Height="23" Margin="332,534,0,-27" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="TextBoxRankingScore_TextChanged" UndoLimit="6" FontSize="14" MaxLength="8" PreviewTextInput="TextBox_NumberInput"/>
                     <Image x:Name="ranking_perfect" HorizontalAlignment="Left" Height="79" Margin="170,431,0,0" VerticalAlignment="Top" Width="251" MouseLeftButtonDown="Image_MouseLeftButtonDown" Source="Default/ranking-perfect.png" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" SourceUpdated="Image_SourceUpdated" Initialized="Image_Initialized" Loaded="Image_Loaded"/>
                     <Grid x:Name="GridScore" HorizontalAlignment="Left" Height="42" Margin="120,91,0,0" VerticalAlignment="Top" Width="240" Background="#00745B5B">
                         <Grid.ColumnDefinitions>
@@ -173,7 +173,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Cursor">
-                <Grid x:Name="GridCursor" Background="#FFE5E5E5" MouseEnter="CursorGrid_MouseEnter" Cursor="Cross" ForceCursor="True">
+                <Grid x:Name="GridCursor" Background="#FFE5E5E5" Cursor="Cross" ForceCursor="True">
                     <Image x:Name="cursor" HorizontalAlignment="Left" Height="80" Margin="50,71,0,0" VerticalAlignment="Top" Width="80" MouseLeftButtonDown="Image_MouseLeftButtonDown" Source="Default/cursor.png" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" SourceUpdated="Image_SourceUpdated" Initialized="Image_Initialized" Loaded="Image_Loaded" Stretch="Fill"/>
                     <Image x:Name="cursormiddle" HorizontalAlignment="Left" Height="40" Margin="69,244,0,0" VerticalAlignment="Top" Width="40" MouseLeftButtonDown="Image_MouseLeftButtonDown" Source="Default/cursormiddle.png" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" SourceUpdated="Image_SourceUpdated" Initialized="Image_Initialized" Loaded="Image_Loaded" Stretch="Fill"/>
                     <Slider x:Name="SliderSizeMul" HorizontalAlignment="Left" Margin="401,-3,0,0" VerticalAlignment="Top" Width="151" Maximum="5" TickFrequency="0.6" Height="22" Value="1" Minimum="0.1" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="1" Background="White" BorderBrush="#00000000" ValueChanged="Slider_ValueChanged"/>
@@ -188,9 +188,8 @@
                     <Label x:Name="LabelToolTip1" Content="Name" HorizontalAlignment="Left" Margin="19,28,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="LabelToolTip2" Content="Author" HorizontalAlignment="Left" Margin="19,56,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="LabelToolTip3" Content="Version" HorizontalAlignment="Left" Margin="19,90,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="LabelToolTipSkinIniProp" Content="" HorizontalAlignment="Left" Margin="638,28,0,0" VerticalAlignment="Top" Width="340"/>
                     <Label x:Name="LabelToolTipSkinIniCurrentProp" Content="" Margin="638,0,0,213" Width="340" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="AnimationFramerate" HorizontalAlignment="Left" Height="23" Margin="264,93,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" Initialized="TextBoxSkinIni_Initialized" KeyDown="TextBoxRankingScore_KeyDown" MouseEnter="SkinIniProperty_MouseEnter"/>
+                    <TextBox x:Name="AnimationFramerate" HorizontalAlignment="Left" Height="23" Margin="264,93,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <Label x:Name="LabelToolTip4" Content="AnimationFramerate" HorizontalAlignment="Left" Margin="141,90,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="AllowSliderBallTint" Content="AllowSliderBallTint" HorizontalAlignment="Left" Margin="19,131,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="HitCircleOverlayAboveNumber" Content="HitCircleOverlayAboveNumber" HorizontalAlignment="Left" Margin="19,233,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
@@ -198,11 +197,11 @@
                     <CheckBox x:Name="CursorCentre" Content="CursorCentre" HorizontalAlignment="Left" Margin="180,131,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="CursorRotate" Content="CursorRotate" HorizontalAlignment="Left" Margin="180,150,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="CursorTrailRotate" Content="CursorTrailRotate" HorizontalAlignment="Left" Margin="180,170,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
-                    <TextBox x:Name="CustomComboBurstSounds" HorizontalAlignment="Left" Height="23" Margin="180,196,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="144" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter" KeyDown="CustomComboBurstSounds_KeyDown"/>
+                    <TextBox x:Name="CustomComboBurstSounds" HorizontalAlignment="Left" Height="23" Margin="180,196,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="144" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter" PreviewTextInput="TextBox_NumberInput"/>
                     <Label x:Name="LabelToolTip5" Content="CustomComboBurstSounds" HorizontalAlignment="Left" Margin="19,193,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="LayeredHitSounds" Content="LayeredHitSounds" HorizontalAlignment="Left" Margin="19,253,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="SliderBallFlip" Content="SliderBallFlip" HorizontalAlignment="Left" Margin="180,256,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
-                    <TextBox x:Name="SliderBallFrames" HorizontalAlignment="Left" Height="23" Margin="120,276,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="55" Initialized="TextBoxSkinIni_Initialized" KeyDown="TextBoxRankingScore_KeyDown" MouseEnter="SkinIniProperty_MouseEnter"/>
+                    <TextBox x:Name="SliderBallFrames" HorizontalAlignment="Left" Height="23" Margin="120,276,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="55" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="SpinnerFadePlayfield" Content="SpinnerFadePlayfield" HorizontalAlignment="Left" Margin="180,278,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="SpinnerFrequencyModulate" Content="SpinnerFrequencyModulate" HorizontalAlignment="Left" Margin="19,319,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
                     <CheckBox x:Name="SpinnerNoBlink" Content="SpinnerNoBlink" HorizontalAlignment="Left" Margin="180,299,0,0" VerticalAlignment="Top" Initialized="TextBoxSkinIni_Initialized" MouseEnter="SkinIniProperty_MouseEnter"/>
@@ -243,11 +242,11 @@
                     <Label x:Name="LabelToolTip1_Copy16" Content="InputOverlayText" HorizontalAlignment="Left" Margin="450,30,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="LabelToolTip1_Copy8" Content="StarBreakAdditive" HorizontalAlignment="Left" Margin="450,310,0,0" VerticalAlignment="Top"/>
                     <GroupBox x:Name="GroupBoxGeneral_Copy" Header="[Colours]" HorizontalAlignment="Left" Height="341" Margin="346,10,0,0" VerticalAlignment="Top" Width="287" Panel.ZIndex="-1"/>
+                    <TextBox x:Name="TextBoxToolTips" HorizontalAlignment="Left" Height="288" Margin="638,17,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340" Background="#00000000" BorderBrush="#00ABADB3" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Debug">
                 <Grid Background="#FFE5E5E5">
-                    <Button x:Name="DebugButtonShowExportArray" Content="show to-export array" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="154" Click="DebugButtonShowExportArray_Click"/>
                     <TextBox x:Name="DebugTextBox" HorizontalAlignment="Left" Height="528" Margin="494,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="467" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
                     <Button x:Name="DebugButtonPathToSkinFile" Content="path to skin file name" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="154" Click="DebugButtonPathToSkinFile_Click"/>
                     <TextBox x:Name="DebugTextBoxPath1" HorizontalAlignment="Left" Height="20" Margin="169,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="320"/>
@@ -258,9 +257,9 @@
                     <Button x:Name="DebugButtonGridScoreCapacity" Content="gridscore capacity" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Width="154" Click="DebugButtonGridScoreCapacity_Click"/>
                     <CheckBox x:Name="DebugCheckBoxStatusShow" Content="status visibility" HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" IsChecked="True" Checked="DebugCheckBoxStatusShow_Checked" Unchecked="DebugCheckBoxStatusShow_Unchecked"/>
                     <Rectangle x:Name="DebugRectangle1" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="336,233,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-                    <TextBox x:Name="DebugTextBoxColourR" HorizontalAlignment="Left" Height="24" Margin="302,233,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" KeyDown="TextBoxRankingScore_KeyDown" MaxLength="3"/>
-                    <TextBox x:Name="DebugTextBoxColourG" HorizontalAlignment="Left" Height="24" Margin="302,272,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" KeyDown="TextBoxRankingScore_KeyDown" MaxLength="3"/>
-                    <TextBox x:Name="DebugTextBoxColourB" HorizontalAlignment="Left" Height="24" Margin="302,309,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" KeyDown="TextBoxRankingScore_KeyDown" MaxLength="3"/>
+                    <TextBox x:Name="DebugTextBoxColourR" HorizontalAlignment="Left" Height="24" Margin="302,233,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" MaxLength="3"/>
+                    <TextBox x:Name="DebugTextBoxColourG" HorizontalAlignment="Left" Height="24" Margin="302,272,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" MaxLength="3"/>
+                    <TextBox x:Name="DebugTextBoxColourB" HorizontalAlignment="Left" Height="24" Margin="302,309,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="29" TextChanged="DebugTextBoxColour_TextChanged" MaxLength="3"/>
 
                 </Grid>
             </TabItem>

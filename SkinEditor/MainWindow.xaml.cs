@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ namespace SkinEditor
     //проблема в том, что каждый объект ведет себя по-своему
     public partial class MainWindow : Window
     {
+        private readonly Regex Numbers = new Regex("[^0-9]+");
         private readonly string[] ToolTipLines = File.ReadAllLines("Resources/ToolTips.txt"); //единоразовое считывание
         private int LastItem = 0; //уничтожить
         private byte R, G, B;
@@ -237,11 +239,6 @@ namespace SkinEditor
 
         }
 
-        private void DebugButtonShowExportArray_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void DebugButtonPathToSkinFile_Click(object sender, RoutedEventArgs e)
         {
             string path = DebugTextBoxPath1.Text;
@@ -346,11 +343,6 @@ namespace SkinEditor
             }
         }
 
-        private void CursorGrid_MouseEnter(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void TextBoxRankingScore_TextChanged(object sender, TextChangedEventArgs e) //фича из разряда юзлесс
         {                                                                                   //потом надо это разгрузить, написание цифр в ранкедскоре не s m o o t h (в дебаге)
                                                                                         //затестить регекс
@@ -404,15 +396,6 @@ namespace SkinEditor
             DebugTextBox.Text = GridScore.Children.Capacity.ToString();
         }
 
-        private void TextBoxRankingScore_KeyDown(object sender, KeyEventArgs e)
-        {
-            string temp = Convert.ToString(e.Key); //уничтожить
-            if (!char.IsDigit(temp[temp.Length - 1]))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void DebugCheckBoxStatusShow_Checked(object sender, RoutedEventArgs e)
         {
             WindowSkinEditor.Height = 690; 
@@ -421,12 +404,6 @@ namespace SkinEditor
         private void DebugCheckBoxStatusShow_Unchecked(object sender, RoutedEventArgs e)
         {
             WindowSkinEditor.Height = 662; //в идеале нужно отключать обновление юи на статус
-        }
-
-        private void ButtonCursor_Click(object sender, RoutedEventArgs e)
-        {
-
-
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -453,11 +430,11 @@ namespace SkinEditor
 
         private void SkinIniProperty_MouseEnter(object sender, MouseEventArgs e)
         {
-            LabelToolTipSkinIniProp.Content = "";
+            TextBoxToolTips.Text = "";
             string[] ToToolTip = SkinIniParser.GetToolTipLines(sender, ToolTipLines);
             foreach(string elem in ToToolTip)
             {
-                LabelToolTipSkinIniProp.Content += elem + "\n";
+                TextBoxToolTips.Text += elem + "\n";
             }
             Type SenderType = sender.GetType();
             if (SenderType.Name == "TextBox")
@@ -475,15 +452,6 @@ namespace SkinEditor
                 LabelToolTipSkinIniCurrentProp.Content = $"Current: {((Frame)sender).Background}";
                 return;
             }
-        }
-
-        private void CustomComboBurstSounds_KeyDown(object sender, KeyEventArgs e)
-        {
-           /* string temp = Convert.ToString(e.Key); //уничтожить
-            if (!char.IsDigit(temp[temp.Length - 1]) || Equals(temp, ','))
-            {
-                e.Handled = true;
-            } */
         }
 
         private void ColourFrame_MouseDown(object sender, MouseButtonEventArgs e)
@@ -505,6 +473,11 @@ namespace SkinEditor
             TextBoxOsuPath.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
 
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = Numbers.IsMatch(e.Text);
+        }
+
         private void DebugTextBoxColour_TextChanged(object sender, TextChangedEventArgs e) //не стал раскладывать на три разных ивента 
         {
             var Sender = sender as TextBox;
@@ -515,12 +488,9 @@ namespace SkinEditor
             }
             Sender.Background = Brushes.White;
 
-            if (DebugTextBoxColourR.Text != "" && int.Parse(DebugTextBoxColourR.Text) < 256)
-                R = Convert.ToByte(DebugTextBoxColourR.Text);
-            if (DebugTextBoxColourG.Text != "" && int.Parse(DebugTextBoxColourG.Text) < 256)
-                G = Convert.ToByte(DebugTextBoxColourG.Text);
-            if (DebugTextBoxColourB.Text != "" && int.Parse(DebugTextBoxColourB.Text) < 256)
-                B = Convert.ToByte(DebugTextBoxColourB.Text);
+            R = SkinIniParser.GetSingleChannel(DebugTextBoxColourR.Text);
+            G = SkinIniParser.GetSingleChannel(DebugTextBoxColourG.Text);
+            B = SkinIniParser.GetSingleChannel(DebugTextBoxColourB.Text);
 
             DebugRectangle1.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
         }
@@ -530,7 +500,6 @@ namespace SkinEditor
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(ComboBoxExistingSkin.SelectedValue + "/cursor.png");
             System.Windows.Forms.Cursor cursor = Png2CursorConverter.CreateCursor(bitmap);
 
-            //System.Windows.Forms.Cursors.PanNorth.Handle
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
             GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
             // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);

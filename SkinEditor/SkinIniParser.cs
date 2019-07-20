@@ -121,5 +121,52 @@ namespace SkinEditor
             }
             return ToExport;
         }
+        #region rgbworker
+        public static byte[] GetRgbColours(Brush Background)
+        {
+            byte R, G, B;
+            byte[] ToReturn = new byte[3];
+            string Colours = Background.ToString();
+            R = Convert.ToByte(Colours[3].ToString()
+                 + Colours[4].ToString(), 16);
+
+            G = Convert.ToByte(Colours[5].ToString()
+                             + Colours[6].ToString(), 16);
+
+            B = Convert.ToByte(Colours[7].ToString()
+                             + Colours[8].ToString(), 16);
+
+            ToReturn[0] = R;
+            ToReturn[1] = G;
+            ToReturn[2] = B;
+            return ToReturn;
+        }
+
+        public static byte[] GetRgbColours(string Background)
+        {
+            byte R, G, B;
+            byte[] ToReturn = new byte[3];
+            R = Convert.ToByte(Background[3].ToString()
+                 + Background[4].ToString(), 16);
+
+            G = Convert.ToByte(Background[5].ToString()
+                             + Background[6].ToString(), 16);
+
+            B = Convert.ToByte(Background[7].ToString()
+                             + Background[8].ToString(), 16);
+
+            ToReturn[0] = R;
+            ToReturn[1] = G;
+            ToReturn[2] = B;
+            return ToReturn;
+        }
+        #endregion
+        public static byte GetSingleChannel(string Colour)
+        {
+            if(Colour != "" && Colour.Length <= 3 && int.Parse(Colour) < 256)
+                return Convert.ToByte(Colour);
+            else
+                return 0;
+        }
     }
 }

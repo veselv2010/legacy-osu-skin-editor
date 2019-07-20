@@ -8,7 +8,7 @@
         Title="ColourPicker" Height="263" Width="329" Closing="Window_Closing">
     <Grid>
         <Rectangle x:Name="RectangleColour" Fill="#FFF4F4F5" Height="160" Margin="138,6,0,0" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Left" Width="160"/>
-        <TextBox x:Name="TextBoxColourR" Height="23" Margin="12,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
+        <TextBox x:Name="TextBoxColourR" Height="23" Margin="12,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120" PreviewTextInput="TextBox_NumberInput"/>
         <TextBox x:Name="TextBoxColourG" Height="23" Margin="12,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
         <TextBox x:Name="TextBoxColourB" Height="23" Margin="12,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
         <TextBox x:Name="TextBoxColourHEX" Height="23" Margin="12,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="TextBoxColour_TextChanged" HorizontalAlignment="Left" Width="120"/>
