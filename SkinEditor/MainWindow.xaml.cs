@@ -159,10 +159,10 @@ namespace SkinEditor
             foreach (Image elem in OnScreenImages)
             {
                 File.Copy(elem.Source.ToString().Remove(0, 8), "export\\" + SkinWorker.Name2FileNameConv(elem.Source.ToString(), false), true);
-                ZipExporter.AddFileToZip("exportzip.osk", elem.Source.ToString().Remove(0, 8)); //it just works
+                ZipExporter.AddFileToZip(TextBoxExportSkinName.Text + ".osk", elem.Source.ToString().Remove(0, 8)); //it just works
                 ProgressBarExport.Value++; //factory new
             }
-            ZipExporter.AddFileToZip("exportzip.osk", "export\\skin.ini");
+            ZipExporter.AddFileToZip(TextBoxExportSkinName.Text + ".osk", "export\\skin.ini");
             Process.Start("export\\");
         }
 
