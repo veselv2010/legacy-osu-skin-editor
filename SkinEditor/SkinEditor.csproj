@@ -132,7 +132,15 @@
     <Content Include="Default\applause.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\ToolTips.txt" />
+    <Resource Include="Resources\osulogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\menuback1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ToolTips.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\reisen_0.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
