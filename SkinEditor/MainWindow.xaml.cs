@@ -446,7 +446,7 @@ namespace SkinEditor
             // blurEffect.Radius = 10;
             //menu_button_background.Effect = blurEffect;
             BitmapProcessing.ChangeOpacity(menu_button_background, 0.5f);
-            BitmapProcessing.SetColorFilter(BitmapProcessing.ColorFilterTypes.Red, menu_button_background);
+           // BitmapProcessing.SetColorFilter(BitmapProcessing.ColorFilterTypes.Red, menu_button_background);
         }
 
         private void DebugTextBoxColour_TextChanged(object sender, TextChangedEventArgs e) //не стал раскладывать на три разных ивента 

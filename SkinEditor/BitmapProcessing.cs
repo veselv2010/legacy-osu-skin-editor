@@ -18,6 +18,7 @@ namespace SkinEditor
         }
         public static void SetColorFilter(ColorFilterTypes colorFilterType, System.Windows.Controls.Image _currentBitmap) 
         {
+            string source = _currentBitmap.Source.ToString();
             Bitmap temp = new Bitmap(_currentBitmap.Source.ToString().Remove(0, 8));
             Bitmap bmap = (Bitmap)temp.Clone();
             Color c;
@@ -64,7 +65,7 @@ namespace SkinEditor
             _currentBitmap.Source = SkinWorker.ImageSourceFromBitmap(temp2);
         }
 
-        public static Bitmap ChangeOpacity(System.Windows.Controls.Image SenderImage, float opacityvalue)
+        public static void ChangeOpacity(System.Windows.Controls.Image SenderImage, float opacityvalue)
         {
             Bitmap img = new Bitmap(SenderImage.Source.ToString().Remove(0, 8));
             Bitmap bmp = new Bitmap(img.Width, img.Height); // Determining Width and Height of Source Image
@@ -75,7 +76,7 @@ namespace SkinEditor
             imgAttribute.SetColorMatrix(colormatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             graphics.DrawImage(img, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, imgAttribute);
             graphics.Dispose();   // Releasing all resource used by graphics 
-            return bmp;
+            SenderImage.Source = SkinWorker.ImageSourceFromBitmap(bmp);
         }
 
         public void Resize(int newWidth, int newHeight, Image _currentBitmap)
