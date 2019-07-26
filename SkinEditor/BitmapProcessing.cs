@@ -18,6 +18,7 @@ namespace SkinEditor
         }
         public static void SetColorFilter(ColorFilterTypes colorFilterType, System.Windows.Controls.Image _currentBitmap) 
         {
+            string source = _currentBitmap.Source.ToString();
             Bitmap temp = new Bitmap(_currentBitmap.Source.ToString().Remove(0, 8));
             Bitmap bmap = (Bitmap)temp.Clone();
             Color c;
