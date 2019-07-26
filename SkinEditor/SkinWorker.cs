@@ -1,8 +1,10 @@
 ﻿//почистить код
 using System;
+using System.Windows;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Runtime.InteropServices;
 
 namespace SkinEditor
 {
@@ -60,7 +62,7 @@ namespace SkinEditor
             {
                 return new BitmapImage(new Uri(path));
             }
-            catch (IOException)
+            catch
             {
                 return null;
             }
@@ -92,6 +94,20 @@ namespace SkinEditor
             TempReverseList.CopyTo(tempchar);
             string list = tempchar.ToString();
             return tempstr; */
+        }
+
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
+        public static System.Windows.Media.ImageSource ImageSourceFromBitmap(System.Drawing.Bitmap bmp)
+        {
+            var handle = bmp.GetHbitmap();
+            try
+            {
+                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally { DeleteObject(handle); }
         }
     }
 }
