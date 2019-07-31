@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+
 namespace SkinEditor
 {
     class SkinIniParser
@@ -11,14 +12,8 @@ namespace SkinEditor
         public static bool IsVersionValid;
         private static readonly List<string> AllowedVersions = new List<string>{ "1.0", "1", "2.0", "2", "2.1", "2.2", "2.3", "2.4", "2.5", "latest", "User" };
         private static string SkinIniPathPrivate;
-        //static List<string> SkinGeneralList = new List<string>();
         static string[] SkinGeneral;
-        int SliderStyle; // 1 - peppysliders
-                         // 2 - mmsliders
-                         // 3 - toonsliders
-                         // 4 - legacyOpenGL-only sliders
 
-        //найти пример skin.ini со всеми параметрами
         public static string SkinIniInit(string skinpath)
         {
             SkinIniPathPrivate = skinpath + "\\skin.ini";

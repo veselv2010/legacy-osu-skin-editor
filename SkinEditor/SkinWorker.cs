@@ -81,19 +81,6 @@ namespace SkinEditor
                     break;
             }
             return ImageSource.Remove(0, RemovableSymb).Replace("_", "-"); 
-
-           /* char[] tempchar = new char[100];
-            List<char> TempReverseList = ImageSource.ToList();
-            TempReverseList.Reverse();
-            int RemovableIndex = TempReverseList.IndexOf('\\');
-            if (RemovableIndex == -1)
-                RemovableIndex = TempReverseList.IndexOf('/');
-
-            TempReverseList.RemoveRange(RemovableIndex, TempReverseList.Count - RemovableIndex);
-            string tempstr = TempReverseList.ToString();
-            TempReverseList.CopyTo(tempchar);
-            string list = tempchar.ToString();
-            return tempstr; */
         }
 
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -105,9 +92,15 @@ namespace SkinEditor
             var handle = bmp.GetHbitmap();
             try
             {
-                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(handle,
+                                                                                    IntPtr.Zero,
+                                                                                    Int32Rect.Empty,
+                                                                                    BitmapSizeOptions.FromEmptyOptions());
             }
-            finally { DeleteObject(handle); }
+            finally
+            {
+                DeleteObject(handle);
+            }
         }
     }
 }

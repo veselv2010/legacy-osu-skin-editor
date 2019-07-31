@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
+
 namespace SkinEditor
 {
     //передавать в метод GetImageBySenderName-чето-там данные о размере объекта в гриде, чтобы в дальнейшем скейлить его в методе до необходимых размеров;
@@ -20,13 +21,12 @@ namespace SkinEditor
         private readonly Regex Numbers = new Regex("[^0-9]+");
         private readonly string[] ToolTipLines = File.ReadAllLines("Resources/ToolTips.txt"); //единоразовое считывание
         private int LastItem = 0; //уничтожить
-        private byte R, G, B;
         private int ProgressBarFilesMax = 0;
-        //public static System.Windows.Threading.DispatcherTimer Animtimer = new System.Windows.Threading.DispatcherTimer(); анимация кнопки skinscan до первого нажатия
         public static List<Image> OnScreenImages = new List<Image>(); //лист со всеми (не со всеми) объектами Image, предназначенными для экспорта
         public static List<string> OnScreenImagesNames = new List<string>(); //это нужно уничтожить в дальнейшем (используется для поиска элементов в основном листе)
         public static List<Image> GridScoreImages = new List<Image>(); //лист с Image из GridScore, нужен для "удобной" работы с ним (не перебирая ~50 элементов в _Copy)(_Score)
         public static List<object> SkinIniPropertiesObj = new List<object>();
+        public static List<Image> TempCopyImages = new List<Image>();
         public MainWindow()
         {
             InitializeComponent();
@@ -46,6 +46,7 @@ namespace SkinEditor
             ComboBoxRankingSymbol.Items.Add("ranking_b");
             ComboBoxRankingSymbol.Items.Add("ranking_c");
             ComboBoxRankingSymbol.Items.Add("ranking_d");
+
         }
 
         private void ButtonOsuPath_Click(object sender, RoutedEventArgs e)
@@ -82,6 +83,7 @@ namespace SkinEditor
             {
                 ComboBoxExistingSkin.Items.Add(elem);
                 ProgressBarExport.Value++;
+                this.UpdateLayout();
             }
             ComboBoxExistingSkin.Visibility = Visibility.Visible;
             ComboBoxExistingSkin.SelectedIndex = 0;
@@ -105,7 +107,6 @@ namespace SkinEditor
             };
             if (myDialog.ShowDialog() == true)
             {
-                
                 ClickedImage.Source = SkinWorker.GetImageByDirectPath(myDialog.FileName);
                
                 SetCursor();//костыль
@@ -124,9 +125,11 @@ namespace SkinEditor
             }
             else
             {
-                Image tempimage = new Image {
+                Image tempimage = new Image
+                {
                     Name = HoveredImage.Name + "_over", //заменить в дальнейшем на что-то более человеческое
-                    Source = HoveredImage.Source};
+                    Source = HoveredImage.Source
+                };
 
                 if (OnScreenImages.Contains(tempimage))
                     return;
@@ -201,6 +204,11 @@ namespace SkinEditor
             {
                 GridScoreImages.Add(InitImage);
             }
+
+            if (InitImage.Name.Contains("_Copy"))
+            {
+                TempCopyImages.Add(InitImage);
+            }
         }
 
         private void TextBoxSkinIni_Initialized(object sender, EventArgs e)
@@ -211,26 +219,6 @@ namespace SkinEditor
         private void Image_Loaded(object sender, RoutedEventArgs e) // добавление кода сюда приведет к увеличению времени затупа в переходах между экранами
         {
 
-        }
-
-        private void DebugButtonPathToSkinFile_Click(object sender, RoutedEventArgs e)
-        {
-            string path = DebugTextBoxPath1.Text;
-            DebugTextBox.Text = SkinWorker.Name2FileNameConv(path, RadioButtonFileSize2.IsChecked.Value);
-        }
-
-        private void DebugButtonShowSources_Click(object sender, RoutedEventArgs e)
-        {
-            DebugTextBox.Text = "";
-            foreach(Image elem in OnScreenImages)
-            {
-                DebugTextBox.Text += elem.Source.ToString() + "\n";
-            }
-        }
-
-        private void DebugOpenFileByPath_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start(DebugTextBoxPath2.Text);
         }
 
         private void ButtonSkinIni_Click(object sender, RoutedEventArgs e)
@@ -262,9 +250,7 @@ namespace SkinEditor
                     var TempFrame = elem as Frame;
                     if (colours == "")
                     {
-                        TempFrame.ToolTip = "no value to work with";
-                        TempFrame.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                        TempFrame.Background.Opacity = 0.01;
+
                     }
                     else
                     {
@@ -344,10 +330,12 @@ namespace SkinEditor
                     }
                     else
                     {
-                        Binding tempbind = new Binding();
-                        tempbind.ElementName = $"score_{elem}";
-                        tempbind.Path = new PropertyPath("Source");
-                        tempbind.Mode = BindingMode.TwoWay;
+                        Binding tempbind = new Binding
+                        {
+                            ElementName = $"score_{elem}",
+                            Path = new PropertyPath("Source"),
+                            Mode = BindingMode.TwoWay
+                        };
 
                         GridScoreImages[ElementIndex].SetBinding(Image.SourceProperty, tempbind);
                         GridScoreImages[ElementIndex].Visibility = Visibility.Visible;
@@ -356,27 +344,12 @@ namespace SkinEditor
                 }
             }
         }
-
-        private void DebugButtonScorebarBackSizes_Click(object sender, RoutedEventArgs e) //выкупить изменение размера рендера пикчи в пикселях
-        {
-            DebugTextBox.Text = $"RenderSize.Height = {OnScreenImages[OnScreenImagesNames.IndexOf("scorebar_bg")].RenderSize.Height}\n" +
-                                $"RenderSize.Width = {OnScreenImages[OnScreenImagesNames.IndexOf("scorebar_bg")].RenderSize.Width}\n" +
-                                $"Width = {OnScreenImages[OnScreenImagesNames.IndexOf("scorebar_bg")].Width}\n" +
-                                $"Height = {OnScreenImages[OnScreenImagesNames.IndexOf("scorebar_bg")].Height}\n";
-            OnScreenImages[OnScreenImagesNames.IndexOf("scorebar_bg")].Height = 31; //сделать временный костыль в виде проверки разрешения пикчи перед ее установкой (scorebar-back)
-        }
-
-        private void DebugButtonGridScoreCapacity_Click(object sender, RoutedEventArgs e)
-        {
-            DebugTextBox.Text = GridScore.Children.Capacity.ToString();
-        }
-
-        private void DebugCheckBoxStatusShow_Checked(object sender, RoutedEventArgs e)
+        private void CheckBoxStatusShow_Checked(object sender, RoutedEventArgs e)
         {
             WindowSkinEditor.Height = 690; 
         }
 
-        private void DebugCheckBoxStatusShow_Unchecked(object sender, RoutedEventArgs e)
+        private void CheckBoxStatusShow_Unchecked(object sender, RoutedEventArgs e)
         {
             WindowSkinEditor.Height = 662; //в идеале нужно отключать обновление юи на статус
         }
@@ -442,28 +415,20 @@ namespace SkinEditor
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //   System.Windows.Media.Effects.BlurEffect blurEffect = new System.Windows.Media.Effects.BlurEffect();
-            // blurEffect.Radius = 10;
-            //menu_button_background.Effect = blurEffect;
-            BitmapProcessing.ChangeOpacity(menu_button_background, 0.5f);
-           // BitmapProcessing.SetColorFilter(BitmapProcessing.ColorFilterTypes.Red, menu_button_background);
+            // ???
+            menu_button_background.Source = SkinWorker.ImageSourceFromBitmap(
+                BitmapProcessing.MergeTwoImages(
+                    System.Drawing.Image.FromFile(
+                        menu_button_background.Source.ToString().Remove(0, 8)
+                                                 ), 
+                    System.Drawing.Image.FromFile("Resources/upper.png")
+                                                )
+                );
         }
 
-        private void DebugTextBoxColour_TextChanged(object sender, TextChangedEventArgs e) //не стал раскладывать на три разных ивента 
+        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var Sender = sender as TextBox;
-            if(Sender.Text != "" && int.Parse(Sender.Text) > 256)
-            {
-                Sender.Background = Brushes.Red;
-                return;
-            }
-            Sender.Background = Brushes.White;
-
-            R = SkinIniParser.GetSingleChannel(DebugTextBoxColourR.Text);
-            G = SkinIniParser.GetSingleChannel(DebugTextBoxColourG.Text);
-            B = SkinIniParser.GetSingleChannel(DebugTextBoxColourB.Text);
-
-            DebugRectangle1.Fill = new SolidColorBrush(Color.FromRgb(R, G, B));
+            Image_MouseLeftButtonDown((object)menu_button_background, e);
         }
 
         private void SetCursor()
@@ -473,7 +438,8 @@ namespace SkinEditor
 
             SafeFileHandle panHandle = new SafeFileHandle(cursor.Handle, false);
             GridCursor.Cursor = System.Windows.Interop.CursorInteropHelper.Create(panHandle);
-            // Png2CursorConverter.CreateCursor(new System.Drawing.Bitmap(SkinWorker.DefaultSkinAbsPath + "/cursor.png"), 5, 5);
+            bitmap.Dispose();
+            cursor.Dispose();
         }
     }
 }
