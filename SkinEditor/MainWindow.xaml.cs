@@ -250,7 +250,9 @@ namespace SkinEditor
                     var TempFrame = elem as Frame;
                     if (colours == "")
                     {
-
+                        TempFrame.ToolTip = "no value to work with";
+                        TempFrame.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                        TempFrame.Background.Opacity = 0.01;
                     }
                     else
                     {
